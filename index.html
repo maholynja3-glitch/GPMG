@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPMG - Tournoi Free Fire Madagascar</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Icones Lucide (SVG professionnel, sans emoji) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              purple: '#7c3aed',
+              cyan: '#06b6d4',
+              fire: '#f97316',
+              dark: '#080a0f',
+              card: '#10141f',
+              border: '#1e2638'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #080a0f;
+      background-image: linear-gradient(to bottom, rgba(8, 10, 15, 0.88), rgba(8, 10, 15, 0.95)), url('image.png');
+      background-attachment: fixed;
+      background-position: center top;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .glow-fire { box-shadow: 0 0 25px -4px rgba(249, 115, 22, 0.45); }
+    .glow-cyan { box-shadow: 0 0 25px -4px rgba(6, 182, 212, 0.4); }
+
+    /* Styles d'Entree Animes */
+    @keyframes entranceFadeDown {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes entranceZoomIn {
+      0% { opacity: 0; transform: scale(0.94) translateY(25px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes pulseEntranceGlow {
+      0%, 100% { border-color: rgba(249, 115, 22, 0.4); box-shadow: 0 0 25px rgba(249, 115, 22, 0.25); }
+      50% { border-color: rgba(6, 182, 212, 0.7); box-shadow: 0 0 35px rgba(6, 182, 212, 0.35); }
+    }
+    .animate-entrance-header { animation: entranceFadeDown 0.8s ease-out forwards; }
+    .animate-entrance-hero { animation: entranceZoomIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .entrance-portal-border { animation: pulseEntranceGlow 3s infinite ease-in-out; }
+  </style>
+</head>
+<body class="text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-fire selection:text-white">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-brand-dark/90 border-b border-brand-border animate-entrance-header">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Gauche : Logo GPMG -->
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="logo.png" onerror="this.onerror=null; this.src='logo.pnj';" alt="GPMG Logo" class="h-11 w-auto max-w-[140px] object-contain group-hover:scale-105 transition-transform">
+        <div class="border-l border-brand-border/80 pl-3">
+          <span class="text-xl font-black tracking-wider block text-white">GPMG</span>
+          <span class="text-[10px] block font-bold text-brand-fire tracking-widest -mt-1 uppercase">Free Fire Arena</span>
+        </div>
+      </a>
+
+      <!-- Centre : Menu de Navigation avec Icones SVG (Zero Emoji) -->
+      <nav class="hidden xl:flex items-center gap-1 text-sm font-semibold text-slate-300">
+        <a href="index.html" class="flex items-center gap-2 text-brand-fire py-2 px-3 rounded-xl bg-slate-800/80">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>Home</span>
+        </a>
+        <a href="game.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+          <span>Jeux & Tournois</span>
+        </a>
+        <a href="suivi.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="list-checks" class="w-4 h-4"></i>
+          <span>Suivi (Manaraka)</span>
+        </a>
+        <a href="wach.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="tv" class="w-4 h-4"></i>
+          <span>Watch</span>
+        </a>
+        <a href="loot.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="gift" class="w-4 h-4"></i>
+          <span>Loots</span>
+        </a>
+      </nav>
+
+      <!-- Droite : Support & Login -->
+      <div class="flex items-center gap-3">
+        <!-- Bouton Support -->
+        <button onclick="openSupportModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-brand-border transition-all">
+          <i data-lucide="headset" class="w-4 h-4 text-emerald-400"></i>
+          <span>Support</span>
+        </button>
+
+        <!-- Bouton Login -->
+        <a href="login.html" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-brand-fire to-amber-600 hover:from-orange-600 hover:to-amber-500 text-white shadow-lg glow-fire hover:scale-105 transition-all">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span>Login</span>
+        </a>
+
+        <!-- Menu Mobile Button -->
+        <button onclick="toggleMobileMenu()" class="xl:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-brand-border">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu Mobile Déroulant -->
+    <div id="mobileMenu" class="hidden xl:hidden bg-brand-dark/95 border-b border-brand-border px-4 py-4 space-y-2">
+      <a href="index.html" class="flex items-center gap-3 p-2.5 rounded-lg text-brand-fire bg-slate-800">
+        <i data-lucide="home" class="w-4 h-4"></i>
+        <span>Home</span>
+      </a>
+      <a href="game.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+        <span>Jeux & Tournois</span>
+      </a>
+      <a href="suivi.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="list-checks" class="w-4 h-4"></i>
+        <span>Suivi (Manaraka)</span>
+      </a>
+      <a href="wach.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="tv" class="w-4 h-4"></i>
+        <span>Watch</span>
+      </a>
+      <a href="loot.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="gift" class="w-4 h-4"></i>
+        <span>Loots</span>
+      </a>
+      <a href="login.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="user" class="w-4 h-4"></i>
+        <span>Login</span>
+      </a>
+      <a href="inscription.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="user-plus" class="w-4 h-4"></i>
+        <span>Inscription</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <main class="flex-1 flex flex-col justify-center relative py-20 lg:py-28 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 animate-entrance-hero">
+      
+      <!-- Badge d'Entree Esport -->
+      <div class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest bg-brand-fire/15 text-orange-400 border border-brand-fire/30 mb-8 entrance-portal-border">
+        <span class="w-2.5 h-2.5 rounded-full bg-brand-fire animate-ping"></span>
+        GPMG Esports - Tournoi Free Fire Madagascar
+      </div>
+
+      <!-- Titre Principal -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight uppercase max-w-5xl mx-auto">
+        Entrez dans l'Arene <span class="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-500">GPMG Free Fire</span>
+      </h1>
+
+      <p class="mt-6 text-base sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        La plateforme d'esport officielle pour les tournois et affrontements Free Fire a Madagascar.
+      </p>
+
+      <!-- Boutons d'Action Principaux -->
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href="game.html" class="px-8 py-4 rounded-xl font-extrabold uppercase text-sm sm:text-base bg-gradient-to-r from-brand-fire to-amber-500 text-slate-950 shadow-lg glow-fire hover:scale-105 transition-all flex items-center gap-2.5">
+          <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+          <span>Voir les Tournois</span>
+        </a>
+        <a href="suivi.html" class="px-8 py-4 rounded-xl font-bold text-sm sm:text-base bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-brand-border hover:border-slate-500 transition-all flex items-center gap-2">
+          <i data-lucide="activity" class="w-5 h-5 text-brand-cyan"></i>
+          <span>Suivi des Matchs</span>
+        </a>
+        <a href="inscription.html" class="px-8 py-4 rounded-xl font-bold text-sm sm:text-base bg-brand-card hover:bg-slate-800 text-slate-200 border border-brand-border hover:border-brand-fire transition-all flex items-center gap-2">
+          <i data-lucide="user-plus" class="w-5 h-5 text-brand-fire"></i>
+          <span>Inscription Joueur</span>
+        </a>
+      </div>
+
+      <!-- Section Paiement Orange Money, MVola, Airtel Money en bas -->
+      <div class="mt-16 pt-8 border-t border-brand-border/60 max-w-2xl mx-auto">
+        <span class="text-xs uppercase tracking-widest text-slate-400 block font-semibold mb-4">
+          Paiements autorises a Madagascar
+        </span>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <div class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500/10 border border-orange-500/40 text-orange-400 font-bold text-sm shadow-lg">
+            <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+            Orange Money
+          </div>
+          <div class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-400/10 border border-yellow-400/40 text-yellow-300 font-bold text-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+            MVola
+          </div>
+          <div class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-500/10 border border-red-500/40 text-red-400 font-bold text-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+            Airtel Money
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-auto bg-slate-950 border-t border-brand-border py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" onerror="this.onerror=null; this.src='logo.pnj';" alt="GPMG Logo" class="h-9 w-auto object-contain">
+        <div>
+          <span class="text-sm font-bold text-white block">GPMG Esports Madagascar</span>
+          <span class="text-xs text-slate-400">Plateforme officielle Free Fire</span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+        <a href="index.html" class="text-brand-fire font-bold">Home</a>
+        <a href="game.html" class="hover:text-white transition-colors">Tournois</a>
+        <a href="suivi.html" class="hover:text-white transition-colors">Suivi</a>
+        <a href="wach.html" class="hover:text-white transition-colors">Watch</a>
+        <a href="loot.html" class="hover:text-white transition-colors">Loots</a>
+        <a href="login.html" class="hover:text-white transition-colors">Login</a>
+        <button onclick="openSupportModal()" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
+          <i data-lucide="headset" class="w-4 h-4"></i>
+          Support
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALE SUPPORT ================= -->
+  <div id="supportModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-brand-card w-full max-w-md rounded-3xl border border-brand-border p-6 sm:p-8 relative shadow-2xl text-center">
+      <button onclick="closeSupportModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="headset" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white">Support GPMG</h3>
+      <p class="text-xs text-slate-400 mt-1">Assistance Orange Money & Tournois 7j/7</p>
+
+      <div class="mt-6 space-y-3">
+        <a href="https://wa.me/261340000000?text=Bonjour%20Support%20GPMG%2C%20j%27ai%20besoin%20d%27assistance" target="_blank" class="w-full py-3 px-4 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center gap-2">
+          <i data-lucide="phone" class="w-4 h-4"></i>
+          <span>Contacter sur WhatsApp (+261 34 00 000 00)</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    lucide.createIcons();
+
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+    function openSupportModal() {
+      document.getElementById('supportModal').classList.remove('hidden');
+    }
+    function closeSupportModal() {
+      document.getElementById('supportModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

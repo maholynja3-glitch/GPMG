@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPMG - Suivi des Matchs (Manaraka)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Icones Lucide (SVG professionnel, sans emoji) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client & Config Centralisee -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              purple: '#7c3aed',
+              cyan: '#06b6d4',
+              fire: '#f97316',
+              dark: '#080a0f',
+              card: '#10141f',
+              border: '#1e2638'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #080a0f;
+      background-image: linear-gradient(to bottom, rgba(8, 10, 15, 0.88), rgba(8, 10, 15, 0.95)), url('image.png');
+      background-attachment: fixed;
+      background-position: center top;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .glow-cyan { box-shadow: 0 0 25px -4px rgba(6, 182, 212, 0.4); }
+    .glow-fire { box-shadow: 0 0 25px -4px rgba(249, 115, 22, 0.45); }
+    .glow-green { box-shadow: 0 0 25px -4px rgba(34, 197, 94, 0.45); }
+  </style>
+</head>
+<body class="text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-fire selection:text-white">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-brand-dark/90 border-b border-brand-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Gauche : Logo GPMG -->
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="logo.png" onerror="this.onerror=null; this.src='logo.pnj';" alt="GPMG Logo" class="h-11 w-auto max-w-[140px] object-contain group-hover:scale-105 transition-transform">
+        <div class="border-l border-brand-border/80 pl-3">
+          <span class="text-xl font-black tracking-wider block text-white">GPMG</span>
+          <span class="text-[10px] block font-bold text-brand-fire tracking-widest -mt-1 uppercase">Free Fire Arena</span>
+        </div>
+      </a>
+
+      <!-- Centre : Menu de Navigation avec Icones SVG (Zero Emoji) -->
+      <nav class="hidden xl:flex items-center gap-1 text-sm font-semibold text-slate-300">
+        <a href="index.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>Home</span>
+        </a>
+        <a href="game.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+          <span>Jeux & Tournois</span>
+        </a>
+        <a href="suivi.html" class="flex items-center gap-2 text-brand-cyan py-2 px-3 rounded-xl bg-slate-800/80">
+          <i data-lucide="list-checks" class="w-4 h-4"></i>
+          <span>Suivi (Manaraka)</span>
+        </a>
+        <a href="wach.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="tv" class="w-4 h-4"></i>
+          <span>Watch</span>
+        </a>
+        <a href="loot.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="gift" class="w-4 h-4"></i>
+          <span>Loots</span>
+        </a>
+      </nav>
+
+      <!-- Droite : Support & Login -->
+      <div class="flex items-center gap-3">
+        <button onclick="openSupportModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-brand-border transition-all">
+          <i data-lucide="headset" class="w-4 h-4 text-emerald-400"></i>
+          <span>Support</span>
+        </button>
+
+        <a href="login.html" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-brand-fire to-amber-600 hover:from-orange-600 hover:to-amber-500 text-white shadow-lg glow-fire hover:scale-105 transition-all">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span>Login</span>
+        </a>
+
+        <button onclick="toggleMobileMenu()" class="xl:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-brand-border">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu Mobile Déroulant -->
+    <div id="mobileMenu" class="hidden xl:hidden bg-brand-dark/95 border-b border-brand-border px-4 py-4 space-y-2">
+      <a href="index.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="home" class="w-4 h-4"></i>
+        <span>Home</span>
+      </a>
+      <a href="game.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+        <span>Jeux & Tournois</span>
+      </a>
+      <a href="suivi.html" class="flex items-center gap-3 p-2.5 rounded-lg text-brand-cyan bg-slate-800">
+        <i data-lucide="list-checks" class="w-4 h-4"></i>
+        <span>Suivi (Manaraka)</span>
+      </a>
+      <a href="wach.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="tv" class="w-4 h-4"></i>
+        <span>Watch</span>
+      </a>
+      <a href="loot.html" class="flex items-center gap-3 p-2.5 rounded-lg text-slate-300 hover:bg-slate-800">
+        <i data-lucide="gift" class="w-4 h-4"></i>
+        <span>Loots</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= EN-TETE DE LA PAGE SUIVI.HTML ================= -->
+  <section class="py-12 border-b border-brand-border/70 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30 mb-4">
+        <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+        Direct & Resultats GPMG (Lie a Supabase)
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
+        Suivi des Matchs & Acces Room
+      </h1>
+      <p class="mt-3 text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+        Verifiez le statut de votre inscription Mobile Money et recuperez le Room ID sans mot de passe des validation.
+      </p>
+
+      <!-- Barre de recherche connectee a Supabase -->
+      <form onsubmit="handleMatchSearch(event)" class="mt-8 max-w-xl mx-auto flex gap-2">
+        <input type="text" id="matchSearchInput" required placeholder="Votre nom d'escouade ou numero de telephone..." class="flex-1 bg-slate-900 border border-brand-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-cyan">
+        <button type="submit" class="px-5 py-3 rounded-xl bg-brand-cyan hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-colors flex items-center gap-2">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Rechercher</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= CONTENU PRINCIPAL ================= -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- RESULTATS DYNAMIQUES DE LA RECHERCHE SUPABASE -->
+    <div id="searchResultsContainer" class="hidden space-y-6 mb-8"></div>
+
+    <!-- CARTE D'ETAT PAR DEFAUT QUAND PAS DE RECHERCHE -->
+    <div id="defaultStatusCard" class="bg-brand-card/90 border border-brand-border rounded-3xl p-8 sm:p-12 text-center backdrop-blur-md shadow-2xl">
+      <div class="w-16 h-16 rounded-3xl bg-slate-800/80 text-slate-400 border border-brand-border flex items-center justify-center mx-auto mb-5">
+        <i data-lucide="shield-check" class="w-8 h-8 text-brand-cyan"></i>
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Consultez votre Escouade</h2>
+      
+      <p class="mt-3 text-slate-400 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+        Saisissez le nom de votre escouade ou votre numero de telephone ci-dessus pour verifier la validation de votre paiement et obtenir l'ID de la Room de match des sa publication.
+      </p>
+
+      <div class="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-900 border border-brand-border text-xs text-slate-300 font-semibold">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        Connexion Supabase Realtime active
+      </div>
+
+      <!-- Actions Rapides -->
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="game.html" class="px-6 py-3.5 rounded-xl font-bold text-xs uppercase bg-brand-fire hover:bg-orange-500 text-slate-950 transition-all flex items-center gap-2">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          <span>Voir la liste des tournois</span>
+        </a>
+        
+        <a href="https://wa.me/261340000000?text=Bonjour%20GPMG%2C%20je%20souhaite%20etre%20notifie%20des%20prochains%20matchs" target="_blank" class="px-6 py-3.5 rounded-xl font-bold text-xs uppercase bg-slate-900 hover:bg-slate-800 text-slate-200 border border-brand-border hover:border-slate-600 transition-all flex items-center gap-2">
+          <i data-lucide="bell" class="w-4 h-4 text-brand-cyan"></i>
+          <span>Support WhatsApp en direct</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-auto bg-slate-950 border-t border-brand-border py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" onerror="this.onerror=null; this.src='logo.pnj';" alt="GPMG Logo" class="h-9 w-auto object-contain">
+        <div>
+          <span class="text-sm font-bold text-white block">GPMG Esports Madagascar</span>
+          <span class="text-xs text-slate-400">Page officielle de suivi des matchs</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6 text-sm text-slate-400">
+        <a href="index.html" class="hover:text-white transition-colors">Home</a>
+        <a href="game.html" class="hover:text-white transition-colors">Tournois</a>
+        <a href="suivi.html" class="text-brand-cyan font-bold">Suivi (Manaraka)</a>
+        <button onclick="openSupportModal()" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
+          <i data-lucide="headset" class="w-4 h-4"></i>
+          Support
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALE SUPPORT ================= -->
+  <div id="supportModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="bg-brand-card w-full max-w-md rounded-3xl border border-brand-border p-6 sm:p-8 relative shadow-2xl text-center">
+      <button onclick="closeSupportModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="headset" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white">Support GPMG</h3>
+      <p class="text-xs text-slate-400 mt-1">Assistance tournoi 7j/7</p>
+
+      <div class="mt-6 space-y-3">
+        <a href="https://wa.me/261340000000?text=Bonjour%20Support%20GPMG%2C%20j%27ai%20une%20question%20sur%20le%20suivi%20des%20matchs" target="_blank" class="w-full py-3 px-4 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center gap-2">
+          <i data-lucide="phone" class="w-4 h-4"></i>
+          <span>Contacter sur WhatsApp (+261 34 00 000 00)</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    lucide.createIcons();
+
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+    function openSupportModal() {
+      document.getElementById('supportModal').classList.remove('hidden');
+    }
+    function closeSupportModal() {
+      document.getElementById('supportModal').classList.add('hidden');
+    }
+
+    async function handleMatchSearch(e) {
+      if (e) e.preventDefault();
+      const q = document.getElementById('matchSearchInput').value.trim().toLowerCase();
+      const container = document.getElementById('searchResultsContainer');
+      const defaultCard = document.getElementById('defaultStatusCard');
+
+      if (!q) return;
+
+      container.innerHTML = `
+        <div class="p-8 text-center text-slate-400 bg-brand-card rounded-3xl border border-brand-border">
+          <div class="w-8 h-8 border-2 border-brand-cyan border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          Recherche en cours dans Supabase...
+        </div>
+      `;
+      container.classList.remove('hidden');
+
+      try {
+        const [registrations, tournaments] = await Promise.all([
+          GPMG_DB.getRegistrations(),
+          GPMG_DB.getTournaments()
+        ]);
+
+        const matches = registrations.filter(r => 
+          (r.teamName && r.teamName.toLowerCase().includes(q)) || 
+          (r.phone && r.phone.toLowerCase().includes(q)) ||
+          (r.smsRef && r.smsRef.toLowerCase().includes(q))
+        );
+
+        if (matches.length === 0) {
+          container.innerHTML = `
+            <div class="bg-brand-card border border-brand-border rounded-3xl p-8 text-center">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="search-x" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">Aucune inscription trouvee pour "${q}"</h3>
+              <p class="text-xs text-slate-400 mt-1">Verifiez le nom de votre escouade ou votre numero de telephone.</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        let html = '';
+        matches.forEach(reg => {
+          const tour = tournaments.find(t => t.id === reg.tournamentId);
+          const tourTitle = tour ? tour.title : 'Tournoi Free Fire';
+          const tourMode = tour ? tour.mode : 'Squad 4v4';
+
+          let statusBadge = '';
+          let roomBox = '';
+
+          if (reg.status === 'validated') {
+            statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Valide & Confirme</span>`;
+            
+            if (tour && tour.roomPublished && tour.roomId) {
+              roomBox = `
+                <div class="mt-4 p-5 rounded-2xl bg-slate-900 border border-brand-cyan glow-cyan space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-cyan flex items-center gap-1.5">
+                      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                      Salle de Match Ouverte
+                    </span>
+                    <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                      Sans mot de passe
+                    </span>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-center sm:text-left">
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-brand-border">
+                      <span class="text-[11px] text-slate-400 block uppercase">Room ID Free Fire :</span>
+                      <strong class="text-xl font-mono text-white tracking-widest">${tour.roomId}</strong>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-brand-border">
+                      <span class="text-[11px] text-slate-400 block uppercase">Mot de Passe :</span>
+                      <strong class="text-sm font-bold text-emerald-400">Aucun (Acces Direct)</strong>
+                    </div>
+                  </div>
+                  <p class="text-[11px] text-slate-400 text-center">Ouvrez Free Fire > Personnalisee > Rejoindre avec le Room ID.</p>
+                </div>
+              `;
+            } else {
+              roomBox = `
+                <div class="mt-4 p-4 rounded-xl bg-slate-900/80 border border-brand-border text-center text-xs text-slate-400">
+                  <span class="text-brand-cyan font-bold block mb-1">Inscription Validee !</span>
+                  L'identifiant de la Room sera affiche ici 15 minutes avant le match (entree directe sans mot de passe).
+                </div>
+              `;
+            }
+          } else if (reg.status === 'rejected') {
+            statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30">Refuse</span>`;
+            roomBox = `
+              <div class="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300">
+                <strong>Motif :</strong> ${reg.rejectReason || "Reference de paiement non confirmee"}. Contactez le support WhatsApp pour rectifier.
+              </div>
+            `;
+          } else {
+            statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">En attente de verification</span>`;
+            roomBox = `
+              <div class="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center text-xs text-amber-300">
+                Paiement Mobile Money en cours de controle par l'administrateur. Le statut passera a "Valide" des verification du SMS.
+              </div>
+            `;
+          }
+
+          html += `
+            <div class="bg-brand-card border border-brand-border rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-border pb-4 mb-4">
+                <div>
+                  <span class="text-xs font-bold text-brand-fire uppercase tracking-wider block">${tourMode}</span>
+                  <h3 class="text-xl font-black text-white">${reg.teamName}</h3>
+                  <span class="text-xs text-slate-400">${tourTitle}</span>
+                </div>
+                <div>${statusBadge}</div>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-slate-300">
+                <div><span class="text-slate-500 block text-[11px]">Operateur :</span> <strong>${reg.operator}</strong></div>
+                <div><span class="text-slate-500 block text-[11px]">Ref SMS :</span> <strong class="font-mono text-brand-cyan">${reg.smsRef}</strong></div>
+                <div><span class="text-slate-500 block text-[11px]">Date :</span> <span>${reg.timestamp}</span></div>
+              </div>
+
+              ${roomBox}
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+        lucide.createIcons();
+      } catch (err) {
+        container.innerHTML = `
+          <div class="p-6 text-center text-xs text-red-400 bg-red-500/10 rounded-2xl border border-red-500/30">
+            Erreur lors de la recuperation des donnees Supabase.
+          </div>
+        `;
+      }
+    }
+
+    // Auto-recherche si l'utilisateur est connecte
+    window.addEventListener('DOMContentLoaded', () => {
+      const logged = localStorage.getItem('GPMG_LOGGED_USER');
+      if (logged) {
+        try {
+          const user = JSON.parse(logged);
+          if (user.squad || user.phone) {
+            document.getElementById('matchSearchInput').value = user.squad || user.phone;
+            handleMatchSearch();
+          }
+        } catch (e) {}
+      }
+    });
+  </script>
+</body>
+</html>
