@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="responsive.css">
   <title>GPMG - Connexion Joueur (Login)</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -57,12 +58,6 @@
           Connectez-vous pour acceder a vos tournois et suivre vos Room ID.
         </span>
       </div>
-      <div class="hidden md:flex items-center gap-3 shrink-0 text-[11px]">
-        <a href="https://wa.me/261333828347" target="_blank" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-950 text-emerald-400 hover:text-white transition-colors">
-          <i data-lucide="phone" class="w-3 h-3"></i>
-          <span>033 38 283 47</span>
-        </a>
-      </div>
     </div>
   </div>
 
@@ -77,17 +72,26 @@
         </div>
       </a>
 
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/80 border border-brand-border flex items-center gap-2">
-          <i data-lucide="home" class="w-4 h-4"></i>
-          <span>Accueil</span>
-        </a>
-        <a href="inscription.html" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-brand-fire hover:bg-orange-500 text-slate-950 flex items-center gap-2">
-          <i data-lucide="user-plus" class="w-4 h-4"></i>
-          <span>Inscription</span>
-        </a>
-      </div>
+      <nav class="hidden xl:flex items-center gap-1 text-sm font-semibold text-slate-300">
+        <a href="index.html" aria-label="Accueil" title="Accueil" class="flex items-center justify-center p-3 rounded-xl hover:bg-slate-800/60"><i data-lucide="home" class="w-4 h-4"></i></a>
+        <a href="game.html" aria-label="Jeux et tournois" title="Jeux et tournois" class="flex items-center justify-center p-3 rounded-xl hover:bg-slate-800/60"><i data-lucide="gamepad-2" class="w-4 h-4"></i></a>
+        <a href="suivi.html" aria-label="Suivi des matchs" title="Suivi des matchs" class="flex items-center justify-center p-3 rounded-xl hover:bg-slate-800/60"><i data-lucide="list-checks" class="w-4 h-4"></i></a>
+        <a href="wach.html" aria-label="Watch" title="Watch" class="flex items-center justify-center p-3 rounded-xl hover:bg-slate-800/60"><i data-lucide="tv" class="w-4 h-4"></i></a>
+        <a href="loot.html" aria-label="Loots" title="Loots" class="flex items-center justify-center p-3 rounded-xl hover:bg-slate-800/60"><i data-lucide="gift" class="w-4 h-4"></i></a>
+        <a href="inscription.html" aria-label="Inscription" title="Inscription" class="flex items-center justify-center p-3 rounded-xl hover:bg-slate-800/60"><i data-lucide="user-plus" class="w-4 h-4"></i></a>
+      </nav>
+      <button type="button" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu" title="Menu" class="xl:hidden flex h-11 w-11 items-center justify-center rounded-xl bg-slate-800 text-slate-300 border border-brand-border">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
     </div>
+    <nav id="mobileMenu" class="hidden xl:hidden bg-brand-dark border-b border-brand-border px-4 py-4">
+      <a href="index.html" aria-label="Accueil" title="Accueil" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800"><i data-lucide="home" class="w-5 h-5"></i></a>
+      <a href="game.html" aria-label="Jeux et tournois" title="Jeux et tournois" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800"><i data-lucide="gamepad-2" class="w-5 h-5"></i></a>
+      <a href="suivi.html" aria-label="Suivi des matchs" title="Suivi des matchs" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800"><i data-lucide="list-checks" class="w-5 h-5"></i></a>
+      <a href="wach.html" aria-label="Watch" title="Watch" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800"><i data-lucide="tv" class="w-5 h-5"></i></a>
+      <a href="loot.html" aria-label="Loots" title="Loots" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800"><i data-lucide="gift" class="w-5 h-5"></i></a>
+      <a href="inscription.html" aria-label="Inscription" title="Inscription" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800"><i data-lucide="user-plus" class="w-5 h-5"></i></a>
+    </nav>
   </header>
 
   <!-- ================= FORMULAIRE DE LOGIN ================= -->
@@ -108,10 +112,10 @@
 
       <form onsubmit="handleLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Numero Mobile (Orange Money ou Airtel Money)</label>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Adresse email</label>
           <div class="relative">
-            <input type="text" id="loginUser" required placeholder="032 XX XXX XX ou 033 XX XXX XX" class="w-full bg-slate-900 border border-brand-border rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-brand-fire font-mono">
-            <i data-lucide="phone" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+            <input type="email" id="loginUser" autocomplete="email" required placeholder="vous@exemple.com" class="w-full bg-slate-900 border border-brand-border rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-brand-fire">
+            <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
           </div>
         </div>
 
@@ -159,9 +163,13 @@
   <script>
     lucide.createIcons();
 
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
-      const phone = document.getElementById('loginUser').value.trim();
+      const email = document.getElementById('loginUser').value.trim();
       const pass = document.getElementById('loginPass').value;
       const errDiv = document.getElementById('loginError');
       const btn = document.getElementById('btnLoginSubmit');
@@ -171,11 +179,19 @@
       btn.innerText = "Verification en cours...";
 
       try {
-        const result = await GPMG_DB.loginPlayer(phone, pass);
+        const result = await GPMG_DB.loginPlayer(email, pass);
         if (result.success) {
-          localStorage.setItem('GPMG_LOGGED_USER', JSON.stringify({ phone, squad: (result.player && result.player.squad_name) || "Escouade Joueur" }));
+          localStorage.setItem('GPMG_LOGGED_USER', JSON.stringify({
+            id: result.player.id,
+            email: result.player.email,
+            fullName: result.player.full_name,
+            phone: result.player.phone,
+            squad: result.player.squad_name || "Escouade Joueur",
+            uid: result.player.uid_free_fire,
+            payment: result.player.payment_mode
+          }));
           alert("Connexion reussie ! Bienvenue sur GPMG Madagascar.");
-          window.location.href = "suivi.html";
+          window.location.href = "acc.html";
         } else {
           errDiv.innerText = result.error || "Numero ou mot de passe incorrect.";
           errDiv.classList.remove('hidden');

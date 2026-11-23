@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="responsive.css">
   <title>GPMG - Loots & Recompenses</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -54,12 +55,6 @@
           Cashprizes distribues via Orange Money et Airtel Money aux vainqueurs des tournois.
         </span>
       </div>
-      <div class="hidden md:flex items-center gap-3 shrink-0 text-[11px]">
-        <a href="https://wa.me/261333828347" target="_blank" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-950 text-emerald-400 hover:text-white transition-colors">
-          <i data-lucide="phone" class="w-3 h-3"></i>
-          <span>033 38 283 47</span>
-        </a>
-      </div>
     </div>
   </div>
 
@@ -98,21 +93,23 @@
           <i data-lucide="gift" class="w-4 h-4"></i>
           <span>Loots</span>
         </a>
+        <a href="inscription.html" aria-label="Inscription" title="Inscription" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3.5 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          <span>Inscription</span>
+        </a>
       </nav>
 
       <!-- Droite : Support & Connexion -->
       <div class="flex items-center gap-2.5 sm:gap-3">
-        <a href="https://wa.me/261333828347" target="_blank" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-brand-border transition-all">
+        <a href="index.html#supportModal" aria-label="Support" title="Support" class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-brand-border transition-all">
           <i data-lucide="headset" class="w-4 h-4 text-emerald-400"></i>
-          <span>Support</span>
         </a>
 
-        <a href="login.html" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-brand-fire to-amber-600 hover:from-orange-600 text-white shadow-lg glow-fire hover:scale-105 transition-all">
+        <a href="login.html" aria-label="Connexion" title="Connexion" class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-r from-brand-fire to-amber-600 text-white shadow-lg glow-fire hover:scale-105 transition-all">
           <i data-lucide="user" class="w-4 h-4"></i>
-          <span>Connexion</span>
         </a>
 
-        <button onclick="toggleMobileMenu()" class="xl:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-brand-border">
+        <button type="button" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu" title="Menu" class="xl:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-brand-border">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
       </div>
@@ -139,6 +136,10 @@
       <a href="loot.html" class="flex items-center gap-3 p-3 rounded-xl text-brand-fire bg-slate-800 font-bold">
         <i data-lucide="gift" class="w-5 h-5"></i>
         <span>Loots</span>
+      </a>
+      <a href="inscription.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
+        <i data-lucide="user-plus" class="w-5 h-5"></i>
+        <span>Inscription</span>
       </a>
     </div>
   </header>
@@ -203,6 +204,10 @@
       </div>
     </div>
   </footer>
+
+  <!-- Supabase JS CDN & Configuration Centralisee -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
 
   <script>
     lucide.createIcons();

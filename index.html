@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="responsive.css">
   <title>GPMG - Plateforme Officielle Tournois Free Fire Madagascar</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -70,18 +71,8 @@
       </div>
       <div class="overflow-hidden whitespace-nowrap flex-1 text-center sm:text-left text-[11px] sm:text-xs">
         <span class="inline-block animate-pulse">
-          Tournois Free Fire officiels GPMG : Inscriptions ouvertes via Airtel Money & Orange Money. Contact WhatsApp : 033 38 283 47
+          Tournois Free Fire officiels GPMG : Inscriptions ouvertes via Airtel Money & Orange Money.
         </span>
-      </div>
-      <div class="hidden md:flex items-center gap-3 shrink-0 text-[11px]">
-        <a href="https://wa.me/261333828347" target="_blank" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-950 text-emerald-400 hover:text-white transition-colors">
-          <i data-lucide="phone" class="w-3 h-3"></i>
-          <span>033 38 283 47</span>
-        </a>
-        <a href="https://facebook.com/GPMG.mg" target="_blank" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-950 text-blue-400 hover:text-white transition-colors">
-          <i data-lucide="facebook" class="w-3 h-3"></i>
-          <span>GPMG.mg</span>
-        </a>
       </div>
     </div>
   </div>
@@ -91,103 +82,70 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
       <!-- Gauche : Logo GPMG -->
-      <a href="index.html" class="flex items-center gap-3 group">
-        <img src="logo.png" onerror="this.onerror=null; this.src='logo.pnj';" alt="GPMG Logo" class="h-11 w-auto max-w-[140px] object-contain group-hover:scale-105 transition-transform">
-        <div class="border-l border-brand-border/80 pl-3">
-          <span class="text-xl font-black tracking-wider block text-white">GPMG</span>
-          <span class="text-[10px] block font-bold text-brand-fire tracking-widest -mt-1 uppercase">Free Fire Arena</span>
-        </div>
+      <a href="index.html" aria-label="Accueil GPMG" class="flex items-center group">
+        <img src="logo.png" onerror="this.onerror=null; this.src='logo.pnj';" alt="GPMG Logo" class="h-9 w-auto max-w-[100px] object-contain group-hover:scale-105 transition-transform">
       </a>
 
       <!-- Centre : Menu Desktop (100% Francais, Zero Emoji) -->
       <nav class="hidden xl:flex items-center gap-1 text-sm font-semibold text-slate-300">
-        <a href="index.html" class="flex items-center gap-2 text-brand-fire py-2 px-3.5 rounded-xl bg-slate-800/80">
+        <a href="index.html" aria-label="Accueil" title="Accueil" class="flex items-center justify-center text-brand-fire p-3 rounded-xl bg-slate-800/80">
           <i data-lucide="home" class="w-4 h-4"></i>
-          <span>Accueil</span>
         </a>
-        <a href="game.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3.5 rounded-xl hover:bg-slate-800/60">
+        <a href="game.html" aria-label="Jeux et tournois" title="Jeux et tournois" class="flex items-center justify-center hover:text-brand-fire transition-colors p-3 rounded-xl hover:bg-slate-800/60">
           <i data-lucide="gamepad-2" class="w-4 h-4"></i>
-          <span>Jeux & Tournois</span>
         </a>
-        <a href="suivi.html" class="flex items-center gap-2 hover:text-brand-cyan transition-colors py-2 px-3.5 rounded-xl hover:bg-slate-800/60">
+        <a href="suivi.html" aria-label="Suivi des matchs" title="Suivi des matchs" class="flex items-center justify-center hover:text-brand-cyan transition-colors p-3 rounded-xl hover:bg-slate-800/60">
           <i data-lucide="list-checks" class="w-4 h-4"></i>
-          <span>Suivi des Matchs</span>
         </a>
-        <a href="wach.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3.5 rounded-xl hover:bg-slate-800/60">
+        <a href="wach.html" aria-label="Watch" title="Watch" class="flex items-center justify-center hover:text-brand-fire transition-colors p-3 rounded-xl hover:bg-slate-800/60">
           <i data-lucide="tv" class="w-4 h-4"></i>
-          <span>Watch</span>
         </a>
-        <a href="loot.html" class="flex items-center gap-2 hover:text-brand-fire transition-colors py-2 px-3.5 rounded-xl hover:bg-slate-800/60">
+        <a href="loot.html" aria-label="Loots" title="Loots" class="flex items-center justify-center hover:text-brand-fire transition-colors p-3 rounded-xl hover:bg-slate-800/60">
           <i data-lucide="gift" class="w-4 h-4"></i>
-          <span>Loots</span>
+        </a>
+        <a href="inscription.html" aria-label="Inscription" title="Inscription" class="flex items-center justify-center hover:text-brand-fire transition-colors p-3 rounded-xl hover:bg-slate-800/60">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
         </a>
       </nav>
 
-      <!-- Droite : WhatsApp, Facebook, Connexion -->
+      <!-- Droite : Support et menu mobile -->
       <div class="flex items-center gap-2.5 sm:gap-3">
-        <!-- WhatsApp direct -->
-        <a href="https://wa.me/261333828347?text=Bonjour%20GPMG%20Madagascar%2C%20je%20souhaite%20des%20informations" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition-all">
-          <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-          <span>033 38 283 47</span>
-        </a>
-
         <!-- Bouton Support Modal -->
-        <button onclick="openSupportModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-slate-800/80 border border-brand-border transition-all">
+        <button type="button" onclick="openSupportModal()" aria-label="Support" title="Support" class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-300 hover:text-white bg-slate-800/80 border border-brand-border transition-all">
           <i data-lucide="headset" class="w-4 h-4 text-emerald-400"></i>
-          <span>Support</span>
         </button>
-
-        <!-- Bouton Connexion -->
-        <a href="login.html" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-brand-fire to-amber-600 hover:from-orange-600 hover:to-amber-500 text-white shadow-lg glow-fire hover:scale-105 transition-all">
-          <i data-lucide="user" class="w-4 h-4"></i>
-          <span>Connexion</span>
+        <a href="login.html" aria-label="Connexion" title="Connexion" class="flex h-11 w-11 items-center justify-center rounded-xl text-slate-300 hover:text-white bg-slate-800/80 border border-brand-border transition-all">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
         </a>
 
         <!-- Menu Mobile Button -->
-        <button onclick="toggleMobileMenu()" class="xl:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-brand-border">
+        <button type="button" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu" title="Menu" class="xl:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-brand-border">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
       </div>
     </div>
 
     <!-- Menu Mobile Depliant (Optimise Android & Petits Ecrans) -->
-    <div id="mobileMenu" class="hidden xl:hidden bg-brand-dark/98 border-b border-brand-border px-4 py-4 space-y-2">
-      <a href="index.html" class="flex items-center gap-3 p-3 rounded-xl text-brand-fire bg-slate-800 font-bold">
+    <div id="mobileMenu" class="hidden xl:hidden bg-brand-dark/98 border-b border-brand-border px-4 py-4 grid grid-cols-3 sm:grid-cols-6 gap-2">
+      <a href="index.html" aria-label="Accueil" title="Accueil" class="flex items-center justify-center w-12 h-12 rounded-xl text-brand-fire bg-slate-800 font-bold">
         <i data-lucide="home" class="w-5 h-5"></i>
-        <span>Accueil</span>
       </a>
-      <a href="game.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
+      <a href="game.html" aria-label="Jeux et tournois" title="Jeux et tournois" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
         <i data-lucide="gamepad-2" class="w-5 h-5"></i>
-        <span>Jeux & Tournois</span>
       </a>
-      <a href="suivi.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
+      <a href="suivi.html" aria-label="Suivi des matchs" title="Suivi des matchs" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
         <i data-lucide="list-checks" class="w-5 h-5"></i>
-        <span>Suivi des Matchs</span>
       </a>
-      <a href="wach.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
+      <a href="wach.html" aria-label="Watch" title="Watch" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
         <i data-lucide="tv" class="w-5 h-5"></i>
-        <span>Watch (Direct)</span>
       </a>
-      <a href="loot.html" class="flex items-center gap-3 p-3 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
+      <a href="loot.html" aria-label="Loots" title="Loots" class="flex items-center justify-center w-12 h-12 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold">
         <i data-lucide="gift" class="w-5 h-5"></i>
-        <span>Loots & Recompenses</span>
       </a>
-      <a href="inscription.html" class="flex items-center gap-3 p-3 rounded-xl text-orange-400 bg-brand-fire/10 border border-brand-fire/30 font-bold">
+      <a href="inscription.html" aria-label="Inscription" title="Inscription" class="flex items-center justify-center w-12 h-12 rounded-xl text-orange-400 bg-brand-fire/10 border border-brand-fire/30 font-bold">
         <i data-lucide="user-plus" class="w-5 h-5"></i>
-        <span>Inscription Joueur</span>
       </a>
 
-      <!-- Contacts Rapides Mobile -->
-      <div class="pt-3 border-t border-brand-border/60 flex flex-col gap-2">
-        <a href="https://wa.me/261333828347" target="_blank" class="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-          <i data-lucide="phone" class="w-4 h-4"></i>
-          <span>WhatsApp : 033 38 283 47</span>
-        </a>
-        <a href="https://facebook.com/GPMG.mg" target="_blank" class="flex items-center gap-2 p-2.5 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 text-xs font-bold">
-          <i data-lucide="facebook" class="w-4 h-4"></i>
-          <span>Facebook : GPMG.mg</span>
-        </a>
-      </div>
     </div>
   </header>
 
@@ -216,10 +174,6 @@
           <i data-lucide="trophy" class="w-4 h-4 sm:w-5 sm:h-5"></i>
           <span>Voir les Tournois</span>
         </a>
-        <a href="suivi.html" class="px-7 py-3.5 sm:px-8 sm:py-4 rounded-xl font-bold text-xs sm:text-sm bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-brand-border hover:border-brand-cyan transition-all flex items-center gap-2">
-          <i data-lucide="activity" class="w-4 h-4 sm:w-5 sm:h-5 text-brand-cyan"></i>
-          <span>Suivi des Matchs</span>
-        </a>
         <a href="inscription.html" class="px-7 py-3.5 sm:px-8 sm:py-4 rounded-xl font-bold text-xs sm:text-sm bg-brand-card hover:bg-slate-800 text-slate-200 border border-brand-border hover:border-brand-fire transition-all flex items-center gap-2">
           <i data-lucide="user-plus" class="w-4 h-4 sm:w-5 sm:h-5 text-brand-fire"></i>
           <span>Inscription Joueur</span>
@@ -233,14 +187,14 @@
         </span>
         <div class="grid grid-cols-2 gap-3 sm:gap-4">
           <!-- Orange Money -->
-          <div class="flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl bg-orange-500/10 border border-orange-500/40 text-orange-400 font-bold text-xs sm:text-sm shadow-md glow-orange">
-            <span class="w-2.5 h-2.5 rounded-full bg-orange-500 shrink-0"></span>
-            <span>Orange Money</span>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 px-2 sm:px-4 py-3 rounded-2xl bg-orange-500/10 border border-orange-500/40 text-orange-400 font-bold text-[11px] sm:text-sm shadow-md glow-orange">
+            <img src="orange.png" alt="Orange Money" class="h-10 w-10 object-contain">
+            <span class="text-center">Orange Money</span>
           </div>
           <!-- Airtel Money -->
-          <div class="flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/40 text-red-400 font-bold text-xs sm:text-sm shadow-md glow-red">
-            <span class="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0"></span>
-            <span>Airtel Money</span>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 px-2 sm:px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/40 text-red-400 font-bold text-[11px] sm:text-sm shadow-md glow-red">
+            <img src="airtel.png" alt="Airtel Money" class="h-10 w-10 object-contain">
+            <span class="text-center">Airtel Money</span>
           </div>
         </div>
       </div>
@@ -308,37 +262,52 @@
         <h2 class="text-2xl sm:text-4xl font-black text-white uppercase mt-1">Comment Participer ?</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <!-- Etape 1 -->
-        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 hover:border-brand-fire/40 transition-all shadow-lg">
-          <div class="w-12 h-12 rounded-xl bg-brand-fire/15 text-brand-fire flex items-center justify-center font-black text-lg mb-4">
-            1
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 hover:border-brand-fire/40 transition-all shadow-lg">
+          <div class="w-12 h-12 rounded-xl bg-brand-fire/15 text-brand-fire flex items-center justify-center mb-4">
+            <i data-lucide="trophy" class="w-6 h-6"></i>
           </div>
-          <h3 class="text-lg font-bold text-white mb-2">Choisissez votre Tournoi</h3>
+          <span class="text-[10px] uppercase tracking-widest font-black text-brand-fire">Etape 1</span>
+          <h3 class="text-lg font-bold text-white mt-1 mb-2">Choisissez une session ouverte</h3>
           <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-            Selectionnez le mode de jeu (Solo, Duo, Squad) et verifiez les reglements officiels GPMG.
+            Consultez la date, le mode, les frais et les places restantes avant de choisir votre tournoi.
           </p>
         </div>
 
         <!-- Etape 2 -->
-        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 transition-all shadow-lg">
-          <div class="w-12 h-12 rounded-xl bg-orange-500/15 text-orange-400 flex items-center justify-center font-black text-lg mb-4">
-            2
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 hover:border-orange-500/40 transition-all shadow-lg">
+          <div class="w-12 h-12 rounded-xl bg-orange-500/15 text-orange-400 flex items-center justify-center mb-4">
+            <i data-lucide="wallet" class="w-6 h-6"></i>
           </div>
-          <h3 class="text-lg font-bold text-white mb-2">Paiement Mobile Money</h3>
+          <span class="text-[10px] uppercase tracking-widest font-black text-orange-400">Etape 2</span>
+          <h3 class="text-lg font-bold text-white mt-1 mb-2">Reglez les frais d'inscription</h3>
           <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-            Reglez votre slot via Orange Money ou Airtel Money et conservez la reference SMS de transaction.
+            Payez le montant indique avec Orange Money ou Airtel Money. Gardez le SMS et sa reference de transaction.
           </p>
         </div>
 
         <!-- Etape 3 -->
-        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 hover:border-brand-cyan/40 transition-all shadow-lg">
-          <div class="w-12 h-12 rounded-xl bg-brand-cyan/15 text-brand-cyan flex items-center justify-center font-black text-lg mb-4">
-            3
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 hover:border-brand-cyan/40 transition-all shadow-lg">
+          <div class="w-12 h-12 rounded-xl bg-brand-cyan/15 text-brand-cyan flex items-center justify-center mb-4">
+            <i data-lucide="clipboard-check" class="w-6 h-6"></i>
           </div>
-          <h3 class="text-lg font-bold text-white mb-2">Acces Room Sans Mot de Passe</h3>
+          <span class="text-[10px] uppercase tracking-widest font-black text-brand-cyan">Etape 3</span>
+          <h3 class="text-lg font-bold text-white mt-1 mb-2">Envoyez votre inscription</h3>
           <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-            Rendez-vous sur la page Suivi des Matchs. Des validation, votre Room ID apparait pour entrer directement.
+            Renseignez votre pseudo, UID Free Fire, telephone et reference SMS. Joignez le reçu pour faciliter la vérification.
+          </p>
+        </div>
+
+        <!-- Etape 4 -->
+        <div class="bg-brand-card border border-brand-border rounded-2xl p-6 hover:border-emerald-500/40 transition-all shadow-lg">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4">
+            <i data-lucide="door-open" class="w-6 h-6"></i>
+          </div>
+          <span class="text-[10px] uppercase tracking-widest font-black text-emerald-400">Etape 4</span>
+          <h3 class="text-lg font-bold text-white mt-1 mb-2">Suivez la validation</h3>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            Retrouvez votre inscription dans le suivi. Apres validation par l'equipe, les informations de salle publiees y seront affichees.
           </p>
         </div>
       </div>
@@ -375,13 +344,6 @@
       <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
         <div>
           Copyright 2026 GPMG.mg - Tous droits reserves. Free Fire Arena Madagascar.
-        </div>
-        <div class="flex flex-wrap items-center gap-5">
-          <a href="game.html" class="hover:text-brand-fire transition-colors">Jeux & Tournois</a>
-          <a href="suivi.html" class="hover:text-brand-cyan transition-colors">Suivi des Matchs</a>
-          <a href="wach.html" class="hover:text-white transition-colors">Watch</a>
-          <a href="loot.html" class="hover:text-white transition-colors">Loots</a>
-          <a href="login.html" class="hover:text-white transition-colors">Connexion</a>
         </div>
       </div>
     </div>
@@ -435,9 +397,19 @@
 
       try {
         let tourns = [];
+        let registrations = [];
         if (window.GPMG_DB) {
-          tourns = await GPMG_DB.getTournaments();
+          [tourns, registrations] = await Promise.all([
+            GPMG_DB.getTournaments(),
+            GPMG_DB.getRegistrations()
+          ]);
         }
+        const registeredCounts = new Map();
+        registrations.forEach(registration => {
+          if (!registration.tournamentId || (registration.status || 'pending').toLowerCase() === 'rejected') return;
+          const tournamentId = String(registration.tournamentId);
+          registeredCounts.set(tournamentId, (registeredCounts.get(tournamentId) || 0) + 1);
+        });
 
         loader.classList.add('hidden');
 
@@ -460,12 +432,20 @@
           const fee = t.fee !== undefined ? t.fee : (t.entry_fee || 0);
           const prize = t.prize || t.prize_pool || '0 MGA';
           const maxSlots = t.maxSlots || t.max_slots || 12;
-          const filled = t.filled_slots || 0;
+          const filled = Math.max(
+            Number(t.filled_slots || 0),
+            registeredCounts.get(String(t.id)) || 0
+          );
           const sNorm = (t.status || '').toUpperCase();
           const isOpen = sNorm === 'OUVERT' || sNorm === 'OPEN';
 
           return `
-            <div class="bg-brand-card border border-brand-border rounded-2xl p-5 hover:border-brand-fire/40 transition-all shadow-lg flex flex-col justify-between">
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-5 hover:border-brand-fire/40 transition-all shadow-lg flex flex-col justify-between overflow-hidden">
+              <div class="-mx-5 -mt-5 mb-4 h-36 rounded-t-2xl overflow-hidden relative">
+                <img src="image.png" alt="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-card via-brand-card/10 to-transparent"></div>
+                <span class="absolute bottom-3 left-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/90">Session officielle GPMG</span>
+              </div>
               <div>
                 <div class="flex items-start justify-between mb-3">
                   <span class="text-[10px] font-bold text-brand-fire uppercase px-2 py-0.5 rounded-full bg-brand-fire/15 border border-brand-fire/30">
@@ -496,7 +476,7 @@
 
               <div>
                 <div class="flex justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Slots</span>
+                  <span>Places prises</span>
                   <span class="${filled >= maxSlots ? 'text-red-400' : 'text-emerald-400'}">${filled} / ${maxSlots}</span>
                 </div>
                 <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden mb-4">
@@ -522,7 +502,20 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
+      if (window.location.hash === '#supportModal') openSupportModal();
       loadIndexTournaments();
+
+      // Synchronisation et actualisation automatique en temps reel sans rechargement
+      if (window.GPMG_DB && GPMG_DB.subscribeTournaments) {
+        GPMG_DB.subscribeTournaments(() => {
+          loadIndexTournaments();
+        });
+      }
+      if (window.GPMG_DB && GPMG_DB.subscribeRegistrations) {
+        GPMG_DB.subscribeRegistrations(() => {
+          loadIndexTournaments();
+        });
+      }
     });
   </script>
 </body>

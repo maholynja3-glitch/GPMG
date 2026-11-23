@@ -103,10 +103,12 @@ CREATE TABLE leaderboard_cache (
 DROP TABLE IF EXISTS players CASCADE;
 CREATE TABLE players (
   id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
-  phone           TEXT        UNIQUE NOT NULL,
+  auth_user_id    UUID        UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+  email           TEXT        UNIQUE,
+  full_name       TEXT,
+  phone           TEXT        NOT NULL,
   squad_name      TEXT,
   uid_free_fire   TEXT,
-  password_hash   TEXT,
   payment_mode    TEXT        DEFAULT 'mvola',
   total_wins      INT         NOT NULL DEFAULT 0,
   total_matches   INT         NOT NULL DEFAULT 0,
@@ -114,6 +116,9 @@ CREATE TABLE players (
   created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE registrations
+  ADD COLUMN IF NOT EXISTS player_id UUID REFERENCES players(id) ON DELETE SET NULL;
 
 -- ───────────────────────────────────────────────
 -- 6. TABLE : banned_uids  (thedarkshift admin)
@@ -352,7 +357,7 @@ CREATE INDEX IF NOT EXISTS idx_tarifs_active            ON tarifs(is_active, sor
 
 -- ═══════════════════════════════════════════════
 -- ROW LEVEL SECURITY (RLS)
--- Acces public total avec cle anon (pas d'auth requise)
+-- Donnees publiques pour le site; profils joueurs reserves au proprietaire et aux admins.
 -- ═══════════════════════════════════════════════
 ALTER TABLE tournaments           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE registrations         ENABLE ROW LEVEL SECURITY;
@@ -375,7 +380,7 @@ DECLARE
 BEGIN
   FOREACH t IN ARRAY ARRAY[
     'tournaments','registrations','match_scores','leaderboard_cache',
-    'players','banned_uids','mobile_money_settings','announcements',
+    'banned_uids','mobile_money_settings','announcements',
     'streams','loot_items','tarifs','support_tickets','site_settings'
   ]
   LOOP
@@ -390,6 +395,24 @@ BEGIN
   END LOOP;
 END;
 $$;
+
+DROP POLICY IF EXISTS players_select_own ON players;
+CREATE POLICY players_select_own ON players
+  FOR SELECT TO authenticated
+  USING (auth.uid() = auth_user_id);
+
+DROP POLICY IF EXISTS players_insert_own ON players;
+CREATE POLICY players_insert_own ON players
+  FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = auth_user_id);
+
+DROP POLICY IF EXISTS players_update_own ON players;
+CREATE POLICY players_update_own ON players
+  FOR UPDATE TO authenticated
+  USING (auth.uid() = auth_user_id)
+  WITH CHECK (auth.uid() = auth_user_id);
+
+GRANT SELECT, INSERT, UPDATE ON players TO authenticated;
 
 -- ═══════════════════════════════════════════════
 -- REALTIME : toutes les tables

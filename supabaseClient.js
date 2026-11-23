@@ -191,6 +191,7 @@ window.GPMG_DB = {
         if (!error && data && data.length > 0) {
           return data.map(r => ({
             id: r.id,
+            playerId: r.player_id || r.playerId || null,
             teamName: r.team_name || r.teamName,
             tournamentId: r.tournament_id || r.tournamentId,
             operator: r.operator,
@@ -223,6 +224,7 @@ window.GPMG_DB = {
   async createRegistration(regData) {
     const newReg = {
       id: regData.id || ('REG-' + Math.floor(1000 + Math.random() * 9000)),
+      player_id: regData.playerId || null,
       team_name: regData.teamName,
       tournament_id: regData.tournamentId,
       operator: regData.operator,
@@ -242,6 +244,7 @@ window.GPMG_DB = {
 
     const localReg = {
       id: newReg.id,
+      playerId: newReg.player_id,
       teamName: regData.teamName,
       tournamentId: regData.tournamentId,
       operator: regData.operator,
@@ -333,50 +336,145 @@ window.GPMG_DB = {
 
   // ================= 5. JOUEURS & AUTHENTIFICATION =================
   async registerPlayer(playerData) {
-    if (this.isSupabaseReady()) {
-      try {
-        const { data, error } = await this.getClient()
-          .from('players')
-          .insert([{
-            phone: playerData.phone,
-            squad_name: playerData.squad,
-            payment_mode: playerData.payment,
-            password_hash: playerData.password,
-            created_at: new Date().toISOString()
-          }])
-          .select();
-        if (!error && data) return { success: true, player: data[0] };
-      } catch (e) {}
+    const client = this.getClient();
+    if (!client || !client.auth) {
+      return { success: false, error: "Le service d'authentification est indisponible. Reessayez lorsque la connexion sera retablie." };
     }
-    try {
-      const players = JSON.parse(localStorage.getItem('GPMG_PLAYERS_LOCAL') || '[]');
-      players.push({ ...playerData, created_at: new Date().toISOString() });
-      localStorage.setItem('GPMG_PLAYERS_LOCAL', JSON.stringify(players));
-      return { success: true, local: true };
-    } catch (e) {
-      return { success: false, error: e.message };
+
+    const { data: authData, error: authError } = await client.auth.signUp({
+      email: playerData.email.trim().toLowerCase(),
+      password: playerData.password,
+      options: {
+        data: {
+          full_name: playerData.fullName,
+          phone: playerData.phone,
+          squad_name: playerData.squad,
+          uid_free_fire: playerData.uid,
+          payment_mode: playerData.payment
+        }
+      }
+    });
+
+    if (authError) {
+      return { success: false, error: authError.message };
     }
+    if (!authData.user) {
+      return { success: false, error: "Supabase n'a pas retourne de compte joueur." };
+    }
+    if (!authData.session) {
+      return {
+        success: false,
+        requiresEmailConfirmation: true,
+        error: "Confirmez votre adresse email depuis le message recu, puis connectez-vous pour terminer votre inscription."
+      };
+    }
+
+    const profile = await this._savePlayerProfile(authData.user, playerData);
+    if (!profile.success) {
+      return profile;
+    }
+    return { success: true, player: profile.player };
   },
 
-  async loginPlayer(phone, password) {
-    if (this.isSupabaseReady()) {
-      try {
-        const { data, error } = await this.getClient()
-          .from('players')
-          .select('*')
-          .eq('phone', phone)
-          .eq('password_hash', password)
-          .single();
-        
-        if (!error && data) return { success: true, player: data };
-      } catch (e) {}
+  async loginPlayer(email, password) {
+    const client = this.getClient();
+    if (!client || !client.auth) {
+      return { success: false, error: "Le service d'authentification est indisponible." };
     }
-    try {
-      const players = JSON.parse(localStorage.getItem('GPMG_PLAYERS_LOCAL') || '[]');
-      const found = players.find(p => p.phone === phone && (p.password === password || p.password_hash === password));
-      if (found) return { success: true, player: found };
-    } catch (e) {}
-    return { success: false, error: "Identifiants incorrects" };
+
+    const { data, error } = await client.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password
+    });
+    if (error) {
+      return { success: false, error: "Adresse email ou mot de passe incorrect." };
+    }
+    if (!data.user) {
+      return { success: false, error: "La session joueur n'a pas pu etre ouverte." };
+    }
+
+    const profile = await this._getPlayerProfile(data.user);
+    if (!profile.success) {
+      return profile;
+    }
+    return { success: true, player: profile.player };
+  },
+
+  async getCurrentPlayer() {
+    const client = this.getClient();
+    if (!client || !client.auth) {
+      return { success: false, error: "Le service d'authentification est indisponible." };
+    }
+
+    const { data, error } = await client.auth.getUser();
+    if (error || !data.user) {
+      return { success: false, error: error ? error.message : "Aucun joueur connecte." };
+    }
+    return this._getPlayerProfile(data.user);
+  },
+
+  async _getPlayerProfile(user) {
+    const { data, error } = await this.getClient()
+      .from('players')
+      .select('id, auth_user_id, email, full_name, phone, squad_name, uid_free_fire, payment_mode')
+      .eq('auth_user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    if (data) {
+      return { success: true, player: data };
+    }
+    return this._savePlayerProfile(user, user.user_metadata || {});
+  },
+
+  async _savePlayerProfile(user, playerData) {
+    const { data, error } = await this.getClient()
+      .from('players')
+      .upsert({
+        auth_user_id: user.id,
+        email: user.email,
+        full_name: playerData.fullName || playerData.full_name || user.user_metadata?.full_name || '',
+        phone: playerData.phone || '',
+        squad_name: playerData.squad || playerData.squad_name || '',
+        uid_free_fire: playerData.uid || playerData.uid_free_fire || '',
+        payment_mode: playerData.payment || playerData.payment_mode || 'Orange Money'
+      }, { onConflict: 'auth_user_id' })
+      .select('id, auth_user_id, email, full_name, phone, squad_name, uid_free_fire, payment_mode')
+      .single();
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    return { success: true, player: data };
+  },
+
+  async updatePlayerProfile(playerId, profileData) {
+    const { data, error } = await this.getClient()
+      .from('players')
+      .update({
+        full_name: profileData.fullName,
+        squad_name: profileData.squad,
+        uid_free_fire: profileData.uid,
+        payment_mode: profileData.payment
+      })
+      .eq('id', playerId)
+      .select('id, auth_user_id, email, full_name, phone, squad_name, uid_free_fire, payment_mode')
+      .single();
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    return { success: true, player: data };
+  },
+
+  async logoutPlayer() {
+    const client = this.getClient();
+    if (!client || !client.auth) return { success: false, error: "Le service d'authentification est indisponible." };
+    const { error } = await client.auth.signOut();
+    if (error) return { success: false, error: error.message };
+    return { success: true };
   },
 
   // ================= 6. PARAMETRES & UIDS BANNIS =================
@@ -403,7 +501,6 @@ window.GPMG_DB = {
     try {
       const KEY = 'GPMG_THEDARKSHIFT_V4_CLEAN';
       let state = {
-        adminPassword: 'admin2026',
         mobileMoney: { orange: { number: '', name: '' }, airtel: { number: '', name: '' } },
         bannedUids: [],
         tournaments: [],
@@ -412,8 +509,101 @@ window.GPMG_DB = {
       };
       const stored = localStorage.getItem(KEY);
       if (stored) state = JSON.parse(stored);
+      delete state.adminPassword;
       callback(state);
       localStorage.setItem(KEY, JSON.stringify(state));
+      this.notifyUpdate();
     } catch (e) {}
+  },
+
+  // ================= 7. REALTIME & SYNCHRONISATION AUTOMATIQUE =================
+  subscribeTournaments(callback) {
+    // 1. Supabase Postgres Changes Realtime
+    if (this.isSupabaseReady()) {
+      try {
+        const channelName = 'rt-tournaments-' + Math.random().toString(36).substring(7);
+        this.getClient().channel(channelName)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'tournaments' }, async (payload) => {
+            console.log('[GPMG Realtime] Mise a jour detectee sur tournaments :', payload);
+            const data = await this.getTournaments();
+            if (callback) callback(data, payload);
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('[GPMG Realtime] Exception channel tournaments :', e);
+      }
+    }
+
+    // 2. Synchronisation instantanee inter-onglets (LocalStorage event)
+    window.addEventListener('storage', async (e) => {
+      if (e.key === 'GPMG_THEDARKSHIFT_V4_CLEAN' || e.key === 'GPMG_PING_SYNC') {
+        const data = await this.getTournaments();
+        if (callback) callback(data);
+      }
+    });
+
+    // 3. Rafraichissement automatique continu en arriere-plan sans recharger la page
+    let lastHash = '';
+    const interval = setInterval(async () => {
+      try {
+        const data = await this.getTournaments();
+        const hash = JSON.stringify(data.map(d => ({ id: d.id, status: d.status, roomId: d.roomId, roomPublished: d.roomPublished, title: d.title })));
+        if (lastHash && hash !== lastHash) {
+          console.log('[GPMG Auto-Sync] Actualisation automatique des tournois sans rechargement.');
+          if (callback) callback(data);
+        }
+        lastHash = hash;
+      } catch (err) {}
+    }, 3500);
+
+    return () => clearInterval(interval);
+  },
+
+  subscribeRegistrations(callback) {
+    // 1. Supabase Postgres Changes Realtime
+    if (this.isSupabaseReady()) {
+      try {
+        const channelName = 'rt-registrations-' + Math.random().toString(36).substring(7);
+        this.getClient().channel(channelName)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'registrations' }, async (payload) => {
+            console.log('[GPMG Realtime] Mise a jour detectee sur registrations :', payload);
+            const data = await this.getRegistrations();
+            if (callback) callback(data, payload);
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('[GPMG Realtime] Exception channel registrations :', e);
+      }
+    }
+
+    // 2. Synchronisation instantanee inter-onglets
+    window.addEventListener('storage', async (e) => {
+      if (e.key === 'GPMG_THEDARKSHIFT_V4_CLEAN' || e.key === 'GPMG_PING_SYNC') {
+        const data = await this.getRegistrations();
+        if (callback) callback(data);
+      }
+    });
+
+    // 3. Rafraichissement automatique continu en arriere-plan sans recharger la page
+    let lastHash = '';
+    const interval = setInterval(async () => {
+      try {
+        const data = await this.getRegistrations();
+        const hash = JSON.stringify(data.map(d => ({ id: d.id, status: d.status, teamName: d.teamName, smsRef: d.smsRef, proof_image: !!d.proof_image })));
+        if (lastHash && hash !== lastHash) {
+          console.log('[GPMG Auto-Sync] Actualisation automatique des inscriptions sans rechargement.');
+          if (callback) callback(data);
+        }
+        lastHash = hash;
+      } catch (err) {}
+    }, 3500);
+
+    return () => clearInterval(interval);
+  },
+
+  notifyUpdate() {
+    try {
+      localStorage.setItem('GPMG_PING_SYNC', Date.now().toString());
+    } catch(e) {}
   }
 };
